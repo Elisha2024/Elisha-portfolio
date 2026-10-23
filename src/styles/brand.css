@@ -1,0 +1,214 @@
+/* Concept 2 — symbol-only identity and the navigation it belongs to. */
+:root {
+  --brand-cyan: #008fa8;
+  --brand-logo-blue-dark: #79b4ff;
+  --brand-logo-cyan-dark: #63dbeb;
+}
+.brand-mark {
+  display: block;
+  width: 56px;
+  height: auto;
+  overflow: visible;
+  flex: 0 0 auto;
+}
+.brand-gradient-start { stop-color: var(--em-cyan, var(--brand-cyan)); }
+.brand-gradient-end { stop-color: var(--em-blue, var(--brand)); }
+.brand-stroke { stroke-dashoffset: 0; }
+.brand-light { display: none; pointer-events: none; }
+/* One soft pass, followed by a long quiet interval. The SVG mask keeps it inside the mark. */
+@keyframes brand-light-pass {
+  0%, 76% { transform: translateX(0); opacity: 0; }
+  78% { opacity: 1; }
+  96% { transform: translateX(112px); opacity: 1; }
+  100% { transform: translateX(112px); opacity: 0; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .brand-light { display: block; animation: brand-light-pass 9s linear infinite; }
+}
+.brand, .brand-symbol {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 56px;
+  min-height: 48px;
+  flex-shrink: 0;
+  border-radius: 6px;
+}
+.brand:focus-visible, .brand-symbol:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+.header-shell {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--chrome);
+  color: #f6f8fc;
+  border-bottom: 1px solid #ffffff0d;
+}
+.header {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 32px;
+}
+.header .brand-mark, .site-footer .brand-mark {
+  --em-cyan: var(--brand-logo-cyan-dark);
+  --em-blue: var(--brand-logo-blue-dark);
+}
+.desktop-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--nav-gap);
+  margin-left: auto;
+  font-family: var(--font-body), Arial, sans-serif;
+  font-size: var(--nav-font-size);
+  font-weight: var(--nav-font-weight);
+  line-height: 1;
+  letter-spacing: var(--nav-tracking);
+}
+.desktop-nav a {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  box-shadow: none;
+  color: #d3deeb;
+  transition: color 140ms ease;
+}
+.desktop-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  width: 16px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--brand-logo-cyan-dark);
+  transform: translateX(-50%) scaleX(.3);
+  opacity: 0;
+  transition: opacity 140ms ease, transform 140ms ease;
+}
+.desktop-nav a:hover { color: #ffffff; }
+.desktop-nav a[aria-current="page"] { color: #b0d4ff; }
+.desktop-nav a[aria-current="page"]::after {
+  opacity: 1;
+  transform: translateX(-50%) scaleX(1);
+}
+.desktop-nav a:hover:not([aria-current="page"])::after {
+  opacity: .45;
+  transform: translateX(-50%) scaleX(.7);
+}
+.desktop-nav a:focus:not(:focus-visible) { outline: none; }
+.desktop-nav a:focus-visible {
+  outline: 2px solid var(--brand-logo-blue-dark);
+  outline-offset: 3px;
+  border-radius: 5px;
+}
+.header-actions { display: flex; align-items: center; gap: 8px; }
+.header .icon-button { color: #d3deeb; }
+.header .icon-button:hover { color: #ffffff; background: #ffffff0b; }
+.theme-sun { display: none; }
+html[data-theme="dark"] .theme-moon { display: none; }
+html[data-theme="dark"] .theme-sun { display: block; }
+.mobile-toggle { display: none; }
+
+/* Native dialog retains focus containment, Escape, and focus return. */
+.mobile-dialog {
+  width: calc(100% - 32px);
+  max-width: 460px;
+  max-height: calc(100dvh - 40px);
+  margin: 20px auto;
+  padding: 0;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  color: var(--ink);
+  background: var(--raised);
+  box-shadow: 0 20px 70px #07152930;
+}
+.mobile-dialog::backdrop { background: #071529a3; }
+.mobile-dialog[open] { animation: brand-menu-in 170ms ease-out; }
+.mobile-sheet { padding: 18px 24px 20px; }
+.mobile-sheet-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 20px;
+}
+.mobile-sheet .brand-mark {
+  width: 46px;
+  --em-cyan: var(--brand-cyan);
+  --em-blue: var(--brand);
+}
+html[data-theme="dark"] .mobile-sheet .brand-mark {
+  --em-cyan: var(--brand-logo-cyan-dark);
+  --em-blue: var(--brand-logo-blue-dark);
+}
+.mobile-sheet .icon-button { color: var(--muted); }
+.mobile-sheet .icon-button:hover { color: var(--accent); background: var(--surface); }
+.mobile-sheet nav a {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  padding: 0 12px;
+  border-top: 1px solid var(--line);
+  color: var(--ink);
+  font-family: var(--font-heading), Arial, sans-serif;
+  font-size: 23px;
+  font-weight: 500;
+  line-height: 1.3;
+  letter-spacing: -.025em;
+  transition: color 140ms ease, background 140ms ease;
+}
+.mobile-sheet nav a:hover { color: var(--accent); background: var(--surface); }
+.mobile-sheet nav a[aria-current="page"] {
+  color: var(--accent);
+  background: color-mix(in srgb, var(--brand) 5%, var(--raised));
+  box-shadow: inset 2px 0 0 var(--brand);
+}
+.menu-footnote { margin: 20px 12px 0; color: var(--muted); font-size: 11px; }
+.footer-name.brand-symbol { min-width: 48px; }
+.footer-name .brand-mark { width: 48px; height: auto; }
+
+/* Runs once on initial header appearance; the static symbol is complete without it. */
+@keyframes brand-stroke-reveal {
+  from { stroke-dashoffset: 1; opacity: .15; }
+  to { stroke-dashoffset: 0; opacity: 1; }
+}
+@keyframes brand-menu-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .brand-mark[data-reveal="true"] .brand-stroke {
+    stroke-dasharray: 1;
+    animation: brand-stroke-reveal 420ms cubic-bezier(.2,.8,.2,1) both;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-stroke, .mobile-dialog { animation: none !important; }
+  .brand-stroke { stroke-dashoffset: 0; }
+  .desktop-nav a::after { transition: none; }
+}
+@media (max-width: 899px) {
+  .header { height: 74px; gap: 20px; }
+  .desktop-nav { display: none; }
+  .mobile-toggle { display: inline-grid; }
+}
+@media (max-width: 700px) {
+  .header { height: 70px; gap: 16px; }
+  .brand, .brand-symbol { min-width: 48px; }
+  .header > .brand .brand-mark { width: 48px; }
+  .header-actions { gap: 4px; }
+}
+@media (max-width: 359px) {
+  .mobile-sheet { padding-inline: 20px; }
+}
+@media print {
+  .header-shell { display: none; }
+}

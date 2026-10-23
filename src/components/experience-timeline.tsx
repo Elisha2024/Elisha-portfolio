@@ -1,0 +1,2 @@
+import { experience } from '@/content/experience';
+export function ExperienceTimeline() { return <div className="timeline">{experience.map(role => <article className="timeline-entry" key={role.organization}><div className="timeline-date">{role.dates}{role.arrangement && <span>{role.arrangement}</span>}</div><div><p className="timeline-organization">{role.organization}</p><h2>{role.role}</h2><ul>{role.contributions.map(item => <li key={item}>{item}</li>)}</ul></div></article>)}</div>; }

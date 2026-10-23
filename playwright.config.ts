@@ -1,0 +1,2 @@
+import { defineConfig, devices } from '@playwright/test';
+export default defineConfig({testDir:'./tests',use:{reducedMotion:'reduce',baseURL:'http://127.0.0.1:4173'},webServer:{command:'python3 -m http.server 4173 --directory out --bind 127.0.0.1',url:'http://127.0.0.1:4173',reuseExistingServer:true,stdout:'ignore',stderr:'ignore'},projects:[{name:'desktop',use:{...devices['Desktop Chrome']}},{name:'mobile',use:{...devices['iPhone 13'],defaultBrowserType:'chromium'}}]});
